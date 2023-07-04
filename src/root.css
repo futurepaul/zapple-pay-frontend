@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+    font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background: ;
+    color: white;
+    @apply bg-background;
+}
+
+input, textarea {
+    @apply bg-[hsl(0,0%,10%)] text-white border border-[hsl(0,0%,20%)] rounded-[0.25rem] p-[0.5rem] text-[1rem] leading-[1.5] w-full mb-2;
+    @apply placeholder:text-[hsl(0,0%,40%)];
+}
+
+form label {
+    @apply font-semibold text-[1.1rem] block my-2;
+}
