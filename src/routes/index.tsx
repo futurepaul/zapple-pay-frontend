@@ -11,7 +11,7 @@ import { nip19 } from "nostr-tools";
 
 const API_URL = import.meta.env.VITE_ZAPPLE_API_URL;
 
-const EMOJI_OPTIONS = ["⚡️", "🤙", "👍", "❤️"];
+const EMOJI_OPTIONS = ["⚡️", "🤙", "👍", "❤️", "🫂"];
 
 type ZappleForm = {
   npub: string;
