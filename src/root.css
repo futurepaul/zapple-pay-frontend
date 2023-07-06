@@ -9,7 +9,7 @@ html {
     @apply bg-background;
 }
 
-input, textarea {
+input, textarea, select {
     @apply bg-[hsl(0,0%,10%)] text-white border border-[hsl(0,0%,20%)] rounded-[0.25rem] p-[0.5rem] text-[1rem] leading-[1.5] w-full mb-2;
     @apply placeholder:text-[hsl(0,0%,40%)];
 }

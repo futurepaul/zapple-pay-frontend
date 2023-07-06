@@ -1,14 +1,23 @@
-import { createForm, custom, required, reset } from "@modular-forms/solid";
+import {
+  createForm,
+  custom,
+  getValue,
+  required,
+  reset,
+} from "@modular-forms/solid";
 import { Motion } from "@motionone/solid";
-import { Show, createSignal } from "solid-js";
+import { For, Show, createSignal } from "solid-js";
 import { nip19 } from "nostr-tools";
 
 const API_URL = import.meta.env.VITE_ZAPPLE_API_URL;
+
+const EMOJI_OPTIONS = ["⚡️", "🤙", "👍", "❤️"];
 
 type ZappleForm = {
   npub: string;
   amount_sats: string;
   nwc: string;
+  emoji: string;
 };
 
 export default function Home() {
@@ -20,11 +29,12 @@ export default function Home() {
       npub: "",
       amount_sats: "",
       nwc: "",
+      emoji: "⚡️",
     },
   });
 
   const handleSubmit = async (f: ZappleForm) => {
-    const { npub, amount_sats, nwc } = f;
+    const { npub, amount_sats, nwc, emoji } = f;
     setSaving(true);
     setError(undefined);
 
@@ -40,6 +50,7 @@ export default function Home() {
           npub: npubHex,
           amount_sats: Number(amount_sats),
           nwc,
+          emoji,
           donations: [],
         }),
       });
@@ -90,8 +101,8 @@ export default function Home() {
             <span class="text-xl text-primary font-semibold">
               UnLoCkAbLe dIgItAl cOnTeNt
             </span>{" "}
-            with a ⚡️ emoji and Zapple Pay will notify your lightning wallet
-            over NWC to pay the zap.
+            with a {getValue(zappleForm, "emoji")} emoji and Zapple Pay will
+            notify your lightning wallet over NWC to pay the zap.
           </p>
           <Form onSubmit={handleSubmit} class="max-w-xl flex flex-col">
             <Field
@@ -112,6 +123,27 @@ export default function Home() {
                 <>
                   <label>npub</label>
                   <input {...props} placeholder="npub1p4..." />
+                  {field.error && <div class="text-red-500">{field.error}</div>}
+                </>
+              )}
+            </Field>
+            <Field name="emoji">
+              {(field, props) => (
+                <>
+                  <label>trigger emoji</label>
+                  <select {...props}>
+                    <For
+                      each={EMOJI_OPTIONS.map((e) => {
+                        return { label: e, value: e };
+                      })}
+                    >
+                      {({ label, value }) => (
+                        <option value={value} selected={field.value === value}>
+                          {label}
+                        </option>
+                      )}
+                    </For>
+                  </select>
                   {field.error && <div class="text-red-500">{field.error}</div>}
                 </>
               )}
