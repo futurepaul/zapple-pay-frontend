@@ -132,7 +132,7 @@ export default function Home() {
               {(field, props) => (
                 <>
                   <label class="mb-0">trigger emoji</label>
-                  <label class="text-sm font-normal mt-0 opacity-75">Damus uses 🤙 by default. Other emojis will not trigger zaps</label>
+                  <label class="text-sm font-normal mt-0 opacity-75">Which reaction emoji do you want to trigger zaps? Damus uses 🤙 by default.</label>
                   <select {...props}>
                     <For
                       each={EMOJI_OPTIONS.map((e) => {
