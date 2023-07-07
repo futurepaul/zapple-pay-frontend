@@ -121,7 +121,7 @@ export default function Home() {
             >
               {(field, props) => (
                 <>
-                  <label class="mb-0">npub</label>
+                  <label class="mb-0">your npub</label>
                   <label class="text-sm font-normal mt-0 opacity-75">Zapple Pay will subscribe to reaction events on this npub</label>
                   <input {...props} placeholder="npub1p4..." />
                   {field.error && <div class="text-red-500">{field.error}</div>}
@@ -132,7 +132,7 @@ export default function Home() {
               {(field, props) => (
                 <>
                   <label class="mb-0">trigger emoji</label>
-                  <label class="text-sm font-normal mt-0 opacity-75">Damus uses 🤙 by default</label>
+                  <label class="text-sm font-normal mt-0 opacity-75">Damus uses 🤙 by default. Other emojis will not trigger zaps</label>
                   <select {...props}>
                     <For
                       each={EMOJI_OPTIONS.map((e) => {
@@ -178,7 +178,8 @@ export default function Home() {
             >
               {(field, props) => (
                 <>
-                  <label>nwc connection string</label>
+                  <label class="mb-0">nwc connection string</label>
+                  <label class="text-sm font-normal mt-0 opacity-75">Connect to your wallet with Nostr Wallet Connect to pay for zaps</label>
                   <textarea
                     {...props}
                     placeholder="nostr+walletconnect://7c30..."
