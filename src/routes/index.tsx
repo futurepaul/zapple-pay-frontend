@@ -29,7 +29,7 @@ export default function Home() {
       npub: "",
       amount_sats: "",
       nwc: "",
-      emoji: "⚡️",
+      emoji: "🤙",
     },
   });
 
@@ -121,7 +121,8 @@ export default function Home() {
             >
               {(field, props) => (
                 <>
-                  <label>npub</label>
+                  <label class="mb-0">your npub</label>
+                  <label class="text-sm font-normal mt-0 opacity-75">Zapple Pay will subscribe to reaction events on this npub</label>
                   <input {...props} placeholder="npub1p4..." />
                   {field.error && <div class="text-red-500">{field.error}</div>}
                 </>
@@ -130,7 +131,8 @@ export default function Home() {
             <Field name="emoji">
               {(field, props) => (
                 <>
-                  <label>trigger emoji</label>
+                  <label class="mb-0">trigger emoji</label>
+                  <label class="text-sm font-normal mt-0 opacity-75">Which reaction emoji do you want to trigger zaps? Damus uses 🤙 by default.</label>
                   <select {...props}>
                     <For
                       each={EMOJI_OPTIONS.map((e) => {
@@ -163,7 +165,8 @@ export default function Home() {
             >
               {(field, props) => (
                 <>
-                  <label>zap amount (in sats)</label>
+                  <label class="mb-0">zap amount</label>
+                  <label class="text-sm font-normal mt-0 opacity-75">How much to zap in sats per reaction</label>
                   <input {...props} placeholder="420" />
                   {field.error && <div class="text-red-500">{field.error}</div>}
                 </>
@@ -175,7 +178,8 @@ export default function Home() {
             >
               {(field, props) => (
                 <>
-                  <label>nwc connection string</label>
+                  <label class="mb-0">nwc connection string</label>
+                  <label class="text-sm font-normal mt-0 opacity-75">Connect to your wallet with Nostr Wallet Connect to pay for zaps</label>
                   <textarea
                     {...props}
                     placeholder="nostr+walletconnect://7c30..."
