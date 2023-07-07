@@ -121,7 +121,8 @@ export default function Home() {
             >
               {(field, props) => (
                 <>
-                  <label>npub</label>
+                  <label class="mb-0">npub</label>
+                  <label class="text-sm font-normal mt-0 opacity-75">Zapple Pay will subscribe to reaction events on this npub</label>
                   <input {...props} placeholder="npub1p4..." />
                   {field.error && <div class="text-red-500">{field.error}</div>}
                 </>
@@ -130,7 +131,8 @@ export default function Home() {
             <Field name="emoji">
               {(field, props) => (
                 <>
-                  <label>trigger emoji</label>
+                  <label class="mb-0">trigger emoji</label>
+                  <label class="text-sm font-normal mt-0 opacity-75">Damus uses 🤙 by default</label>
                   <select {...props}>
                     <For
                       each={EMOJI_OPTIONS.map((e) => {
