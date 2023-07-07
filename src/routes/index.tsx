@@ -165,7 +165,8 @@ export default function Home() {
             >
               {(field, props) => (
                 <>
-                  <label>zap amount (in sats)</label>
+                  <label class="mb-0">zap amount</label>
+                  <label class="text-sm font-normal mt-0 opacity-75">How much to zap in sats per reaction</label>
                   <input {...props} placeholder="420" />
                   {field.error && <div class="text-red-500">{field.error}</div>}
                 </>
