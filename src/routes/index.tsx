@@ -4,10 +4,12 @@ import {
   getValue,
   required,
   reset,
+  setValue,
 } from "@modular-forms/solid";
 import { Motion } from "@motionone/solid";
 import { For, Show, createSignal } from "solid-js";
 import { nip19 } from "nostr-tools";
+import { webln } from "alby-js-sdk";
 
 const API_URL = import.meta.env.VITE_ZAPPLE_API_URL;
 
@@ -32,6 +34,22 @@ export default function Home() {
       emoji: "⚡️",
     },
   });
+
+  const connectWithAlby = async () => {
+    try {
+      const nwc = webln.NostrWebLNProvider.withNewSecret();
+
+      await nwc.initNWC({
+        name: "Zapple Pay",
+      });
+  
+      setValue(zappleForm, "nwc", nwc.getNostrWalletConnectUrl(true))
+    }
+    catch(e) {
+      console.error(e);
+      setError(e as Error);
+    }
+  }
 
   const handleSubmit = async (f: ZappleForm) => {
     const { npub, amount_sats, nwc, emoji } = f;
@@ -175,9 +193,22 @@ export default function Home() {
             >
               {(field, props) => (
                 <>
-                  <label>nwc connection string</label>
+                  <div class="flex justify-between align-bottom my-2">
+                    <label>nwc connection string</label>
+                    <button
+                      class="shadow h-10 rounded-md font-body font-bold hover:opacity-80 w-56 text-black flex justify-center items-center gap-2"
+                      style={{
+                          background:
+                          "linear-gradient(180deg, #FFDE6E 63.72%, #F8C455 95.24%)",
+                      }}
+                      type="button" onClick={connectWithAlby}>
+                        <img class="w-6 h-6" src="/alby.svg"/>
+                      Connect with Alby
+                    </button>
+                  </div>
                   <textarea
                     {...props}
+                    value={field.value}
                     placeholder="nostr+walletconnect://7c30..."
                     rows="5"
                   />

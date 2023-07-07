@@ -19,6 +19,7 @@
     "@motionone/solid": "^10.16.2",
     "@solidjs/meta": "^0.28.5",
     "@solidjs/router": "^0.8.2",
+    "alby-js-sdk": "^2.0.0",
     "nostr-tools": "^1.12.1",
     "solid-js": "^1.7.7",
     "solid-start": "^0.2.26",

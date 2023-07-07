@@ -17,6 +17,9 @@ dependencies:
   '@solidjs/router':
     specifier: ^0.8.2
     version: 0.8.2(solid-js@1.7.7)
+  alby-js-sdk:
+    specifier: ^2.0.0
+    version: 2.0.0
   nostr-tools:
     specifier: ^1.12.1
     version: 1.12.1
@@ -1781,6 +1784,14 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
+  /alby-js-sdk@2.0.0:
+    resolution: {integrity: sha512-VbBM4sTOvbiMi2sWF/jaoBer006fQ7hYIwzi7puYti9aprxWt3qb2GwL24ZFytUhwH3uuX9XPzJhkCWGR0JMAA==}
+    engines: {node: '>=14'}
+    dependencies:
+      crypto-js: 4.1.1
+      nostr-tools: 1.12.1
+    dev: false
+
   /ansi-regex@5.0.1:
     resolution: {integrity: sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==}
     engines: {node: '>=8'}
@@ -2099,6 +2110,10 @@ packages:
       path-key: 3.1.1
       shebang-command: 2.0.0
       which: 2.0.2
+
+  /crypto-js@4.1.1:
+    resolution: {integrity: sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==}
+    dev: false
 
   /cssesc@3.0.0:
     resolution: {integrity: sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==}
