@@ -29,7 +29,7 @@ export default function Home() {
       npub: "",
       amount_sats: "",
       nwc: "",
-      emoji: "⚡️",
+      emoji: "🤙",
     },
   });
 
