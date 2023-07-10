@@ -79,14 +79,10 @@ export default function Home() {
         inView={{ transform: "scaleY(1)" }}
         class="h-[100vh] w-full flex flex-col items-center justify-center  bg-primary text-background"
       >
-        <Motion.h1
-          inView={{ transform: "scaleY(5)" }}
-          initial={{ transform: "scaleY(1)" }}
-          inViewOptions={{ amount: 0.5 }}
-          class="font-bold text-[10vh] mx-auto"
-        >
-          Zapple&nbsp;Pay
-        </Motion.h1>
+        <Motion.img
+          src="/zapple-logo.svg"
+          class="mx-auto h-[270px] w-[270px]"
+        ></Motion.img>
       </Motion.section>
       <Show when={!saved()}>
         <Motion.section
@@ -122,7 +118,9 @@ export default function Home() {
               {(field, props) => (
                 <>
                   <label class="mb-0">your npub</label>
-                  <label class="text-sm font-normal mt-0 opacity-75">Zapple Pay will subscribe to reaction events on this npub</label>
+                  <label class="text-sm font-normal mt-0 opacity-75">
+                    Zapple Pay will subscribe to reaction events on this npub
+                  </label>
                   <input {...props} placeholder="npub1p4..." />
                   {field.error && <div class="text-red-500">{field.error}</div>}
                 </>
@@ -132,7 +130,10 @@ export default function Home() {
               {(field, props) => (
                 <>
                   <label class="mb-0">trigger emoji</label>
-                  <label class="text-sm font-normal mt-0 opacity-75">Which reaction emoji do you want to trigger zaps? Damus uses 🤙 by default.</label>
+                  <label class="text-sm font-normal mt-0 opacity-75">
+                    Which reaction emoji do you want to trigger zaps? Damus uses
+                    🤙 by default.
+                  </label>
                   <select {...props}>
                     <For
                       each={EMOJI_OPTIONS.map((e) => {
@@ -166,7 +167,9 @@ export default function Home() {
               {(field, props) => (
                 <>
                   <label class="mb-0">zap amount</label>
-                  <label class="text-sm font-normal mt-0 opacity-75">How much to zap in sats per reaction</label>
+                  <label class="text-sm font-normal mt-0 opacity-75">
+                    How much to zap in sats per reaction
+                  </label>
                   <input {...props} placeholder="420" />
                   {field.error && <div class="text-red-500">{field.error}</div>}
                 </>
@@ -179,7 +182,10 @@ export default function Home() {
               {(field, props) => (
                 <>
                   <label class="mb-0">nwc connection string</label>
-                  <label class="text-sm font-normal mt-0 opacity-75">Connect to your wallet with Nostr Wallet Connect to pay for zaps</label>
+                  <label class="text-sm font-normal mt-0 opacity-75">
+                    Connect to your wallet with Nostr Wallet Connect to pay for
+                    zaps
+                  </label>
                   <textarea
                     {...props}
                     placeholder="nostr+walletconnect://7c30..."
