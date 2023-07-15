@@ -220,28 +220,40 @@ export default function Home() {
             <label class="text-sm font-normal mt-0 opacity-75">
               Match every zap with a donation to these awesome projects
             </label>
-            <Field name="donate_damus">
-              {(field, props) => (
-                  <>
-                  <div class={"display flex left-3"}>
-                    <input type={"checkbox"} {...props} checked={field.value}>
-                    </input>
-                    <span>Damus</span>
+            <div class="flex flex-col items-start">
+              <Field name="donate_damus" type="boolean">
+                {(field, props) => (
+                  <div class={"flex gap-4 items-center"}>
+                    <input
+                      class="w-4 h-4 m-0"
+                      id={field.name}
+                      type={"checkbox"}
+                      {...props}
+                      checked={field.value}
+                    ></input>
+                    <label class="font-normal" for={field.name}>
+                      Damus
+                    </label>
                   </div>
-                  </>
-              )}
-            </Field>
-            <Field name="donate_opensats">
-              {(field, props) => (
-                  <>
-                    <div class={"display flex"}>
-                      <input type={"checkbox"} {...props} checked={field.value}>
-                      </input>
-                      <span style={"font-weight: normal"}>OpenSats</span>
-                    </div>
-                  </>
-              )}
-            </Field>
+                )}
+              </Field>
+              <Field name="donate_opensats" type="boolean">
+                {(field, props) => (
+                  <div class={"flex gap-4 items-center"}>
+                    <input
+                      class="w-4 h-4 m-0"
+                      id={field.name}
+                      type={"checkbox"}
+                      {...props}
+                      checked={field.value}
+                    ></input>
+                    <label class="font-normal" for={field.name}>
+                      OpenSats
+                    </label>
+                  </div>
+                )}
+              </Field>
+            </div>
             <Show when={!!error()}>
               <p class="text-red-500">Error: {error()?.message}</p>
             </Show>
