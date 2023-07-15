@@ -18,6 +18,8 @@ type ZappleForm = {
   amount_sats: string;
   nwc: string;
   emoji: string;
+  donate_damus: boolean
+  donate_opensats: boolean
 };
 
 export default function Home() {
@@ -30,15 +32,34 @@ export default function Home() {
       amount_sats: "",
       nwc: "",
       emoji: "🤙",
+      donate_damus: false,
+      donate_opensats: false,
     },
   });
 
   const handleSubmit = async (f: ZappleForm) => {
-    const { npub, amount_sats, nwc, emoji } = f;
+    const { npub, amount_sats, nwc, emoji, donate_damus, donate_opensats } = f;
     setSaving(true);
     setError(undefined);
 
     const npubHex = nip19.decode(npub).data;
+
+    let donations = [];
+
+    if (donate_damus) {
+      let item = {
+        amount_sats: Number(amount_sats),
+        lnurl: "jb55@sendsats.lol"
+      }
+      donations.push(item)
+    }
+    if (donate_opensats) {
+      let item = {
+        amount_sats: Number(amount_sats),
+        lnurl: "opensats@vlt.ge"
+      }
+      donations.push(item)
+    }
 
     try {
       const res = await fetch(`https://${API_URL}/set-user`, {
@@ -51,7 +72,7 @@ export default function Home() {
           amount_sats: Number(amount_sats),
           nwc,
           emoji,
-          donations: [],
+          donations,
         }),
       });
 
@@ -195,6 +216,44 @@ export default function Home() {
                 </>
               )}
             </Field>
+            <label class="mb-0">donations (optional)</label>
+            <label class="text-sm font-normal mt-0 opacity-75">
+              Match every zap with a donation to these awesome projects
+            </label>
+            <div class="flex flex-col items-start">
+              <Field name="donate_damus" type="boolean">
+                {(field, props) => (
+                  <div class={"flex gap-4 items-center"}>
+                    <input
+                      class="w-4 h-4 m-0"
+                      id={field.name}
+                      type={"checkbox"}
+                      {...props}
+                      checked={field.value}
+                    ></input>
+                    <label class="font-normal" for={field.name}>
+                      Damus
+                    </label>
+                  </div>
+                )}
+              </Field>
+              <Field name="donate_opensats" type="boolean">
+                {(field, props) => (
+                  <div class={"flex gap-4 items-center"}>
+                    <input
+                      class="w-4 h-4 m-0"
+                      id={field.name}
+                      type={"checkbox"}
+                      {...props}
+                      checked={field.value}
+                    ></input>
+                    <label class="font-normal" for={field.name}>
+                      OpenSats
+                    </label>
+                  </div>
+                )}
+              </Field>
+            </div>
             <Show when={!!error()}>
               <p class="text-red-500">Error: {error()?.message}</p>
             </Show>
