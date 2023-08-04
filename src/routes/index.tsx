@@ -8,6 +8,7 @@ import {
 import { Motion } from "@motionone/solid";
 import { For, Show, createSignal } from "solid-js";
 import { nip19 } from "nostr-tools";
+import { isOnlyOneEmoji } from "~/regex";
 
 const API_URL = import.meta.env.VITE_ZAPPLE_API_URL;
 
@@ -17,9 +18,10 @@ type ZappleForm = {
   npub: string;
   amount_sats: string;
   nwc: string;
+  use_custom_emoji: boolean;
   emoji: string;
-  donate_damus: boolean
-  donate_opensats: boolean
+  donate_damus: boolean;
+  donate_opensats: boolean;
 };
 
 export default function Home() {
@@ -49,16 +51,16 @@ export default function Home() {
     if (donate_damus) {
       let item = {
         amount_sats: Number(amount_sats),
-        lnurl: "jb55@sendsats.lol"
-      }
-      donations.push(item)
+        lnurl: "jb55@sendsats.lol",
+      };
+      donations.push(item);
     }
     if (donate_opensats) {
       let item = {
         amount_sats: Number(amount_sats),
-        lnurl: "opensats@vlt.ge"
-      }
-      donations.push(item)
+        lnurl: "opensats@vlt.ge",
+      };
+      donations.push(item);
     }
 
     try {
@@ -75,6 +77,8 @@ export default function Home() {
           donations,
         }),
       });
+
+      console.log(res);
 
       if (res.ok) {
         console.log("saved");
@@ -147,29 +151,80 @@ export default function Home() {
                 </>
               )}
             </Field>
-            <Field name="emoji">
+            <Show when={getValue(zappleForm, "use_custom_emoji")}>
+              <Field
+                name="emoji"
+                validate={[
+                  required("Please enter an emoji"),
+                  custom((value) => {
+                    if (isOnlyOneEmoji(value!)) {
+                      return true;
+                    } else {
+                      return false;
+                    }
+                  }, "Please enter a valid emoji"),
+                ]}
+              >
+                {(field, props) => (
+                  <>
+                    <label class="mb-0">trigger emoji</label>
+                    <label class="text-sm font-normal mt-0 opacity-75">
+                      Enter any emoji you'd like!
+                    </label>
+                    <input {...props} placeholder="your favorite emoji..." />
+                    {field.error && (
+                      <div class="text-red-500">{field.error}</div>
+                    )}
+                  </>
+                )}
+              </Field>
+            </Show>
+            <Show when={getValue(zappleForm, "use_custom_emoji") === false}>
+              <Field name="emoji">
+                {(field, props) => (
+                  <>
+                    <label class="mb-0">trigger emoji</label>
+                    <label class="text-sm font-normal mt-0 opacity-75">
+                      Which reaction emoji do you want to trigger zaps? Damus
+                      uses 🤙 by default.
+                    </label>
+                    <select {...props}>
+                      <For
+                        each={EMOJI_OPTIONS.map((e) => {
+                          return { label: e, value: e };
+                        })}
+                      >
+                        {({ label, value }) => (
+                          <option
+                            value={value}
+                            selected={field.value === value}
+                          >
+                            {label}
+                          </option>
+                        )}
+                      </For>
+                    </select>
+                    {field.error && (
+                      <div class="text-red-500">{field.error}</div>
+                    )}
+                  </>
+                )}
+              </Field>
+            </Show>
+            <Field name="use_custom_emoji" type="boolean">
               {(field, props) => (
-                <>
-                  <label class="mb-0">trigger emoji</label>
-                  <label class="text-sm font-normal mt-0 opacity-75">
-                    Which reaction emoji do you want to trigger zaps? Damus uses
-                    🤙 by default.
+                <div class={"flex gap-4 items-center"}>
+                  <input
+                    class="w-4 h-4 m-0"
+                    id={field.name}
+                    type={"checkbox"}
+                    {...props}
+                    checked={field.value}
+                  ></input>
+                  <label class="font-normal" for={field.name}>
+                    Use custom emoji
                   </label>
-                  <select {...props}>
-                    <For
-                      each={EMOJI_OPTIONS.map((e) => {
-                        return { label: e, value: e };
-                      })}
-                    >
-                      {({ label, value }) => (
-                        <option value={value} selected={field.value === value}>
-                          {label}
-                        </option>
-                      )}
-                    </For>
-                  </select>
-                  {field.error && <div class="text-red-500">{field.error}</div>}
-                </>
+                </div>
               )}
             </Field>
             <Field
