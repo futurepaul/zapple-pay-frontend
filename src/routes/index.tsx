@@ -51,7 +51,7 @@ export default function Home() {
     if (donate_damus) {
       let item = {
         amount_sats: Number(amount_sats),
-        lnurl: "jb55@sendsats.lol",
+        lnurl: "jb55@getalby.com",
       };
       donations.push(item);
     }
