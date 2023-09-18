@@ -51,14 +51,14 @@ export default function Home() {
     if (donate_damus) {
       let item = {
         amount_sats: Number(amount_sats),
-        lnurl: "jb55@getalby.com",
+        npub: "32e1827635450ebb3c5a7d12c1f8e7b2b514439ac10a67eef3d9fd9c5c68e245",
       };
       donations.push(item);
     }
     if (donate_opensats) {
       let item = {
         amount_sats: Number(amount_sats),
-        lnurl: "opensats@vlt.ge",
+        npub: "787338757fc25d65cd929394d5e7713cf43638e8d259e8dcf5c73b834eb851f2",
       };
       donations.push(item);
     }
