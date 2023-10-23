@@ -4,7 +4,6 @@ import {
   getValue,
   getValues,
   required,
-  reset,
   setValue,
 } from "@modular-forms/solid";
 import { Motion } from "@motionone/solid";
@@ -14,6 +13,7 @@ import { For, Show, createResource, createSignal } from "solid-js";
 import { useParams, useSearchParams } from "solid-start";
 import { Header, VStack } from "~/components";
 import { AutoFaq } from "~/components/AutoZapFaq";
+import { CreateAutozapPage } from "~/components/CreateButton";
 
 const PRIMAL_API = "https://primal-cache.mutinywallet.com/api";
 const API_URL = import.meta.env.VITE_ZAPPLE_API_URL;
@@ -48,6 +48,12 @@ export function getHexpubFromNpub(npub?: string) {
   if (!npub.startsWith("npub")) return npub;
   const user = new NDKUser({ npub });
   return user.hexpubkey;
+}
+
+export function getNpubFromHexpub(hexpub?: string) {
+  if (!hexpub) return;
+  const user = new NDKUser({ hexpubkey: hexpub });
+  return user.npub;
 }
 
 async function fetchUser(npub: string) {
@@ -447,6 +453,7 @@ export default function AutoZap() {
         </Show>
 
         <AutoFaq />
+        <CreateAutozapPage />
       </div>
     </main>
   );
