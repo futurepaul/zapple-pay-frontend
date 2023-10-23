@@ -9,7 +9,13 @@ import {
 import { Motion } from "@motionone/solid";
 import { NDKUser, NDKUserProfile } from "@nostr-dev-kit/ndk";
 import { nip19 } from "nostr-tools";
-import { For, Show, createResource, createSignal } from "solid-js";
+import {
+  For,
+  Show,
+  createEffect,
+  createResource,
+  createSignal,
+} from "solid-js";
 import { useParams, useSearchParams } from "solid-start";
 import { Header, VStack } from "~/components";
 import { AutoFaq } from "~/components/AutoZapFaq";
@@ -23,8 +29,8 @@ const ZAPPLE_PAY_NPUB =
 function formatMutinyLink(
   name: string,
   npub: string,
-  interval?: string,
-  amount?: string
+  amount: string,
+  interval?: string
 ) {
   // OUTPUT: https://app.mutinywallet.com/settings/connections?return_to=http%3A%2F%2Flocalhost%3A3000%2Fautozap%2Fnpub1p4kg8zxukpym3h20erfa3samj00rm2gt4q5wfuyu3tg0x3jg3gesvncxf8&budget_renewal=day&max_amount=1234
   const appUrl = "https://app.mutinywallet.com";
@@ -36,7 +42,7 @@ function formatMutinyLink(
     return_to: callbackUrl,
     name: `AutoZap-${name}`,
     budget_renewal: interval || "day",
-    max_amount: amount || "1000",
+    max_amount: amount,
   });
 
   return `${appUrl}${path}?${query.toString()}`;
@@ -111,6 +117,8 @@ function AutoZapForm(props: {
   const [error, setError] = createSignal<Error | undefined>(undefined);
   const [saved, setSaved] = createSignal(false);
 
+  const [searchParams] = useSearchParams();
+
   function restoreStateFromLocalStorage() {
     if (typeof window === "undefined") return undefined;
     const formState = localStorage.getItem(`autozap:${props.npub}`);
@@ -141,7 +149,7 @@ function AutoZapForm(props: {
       amount_sats: cachedFormState?.amount_sats || undefined,
       manual_nwc: false,
       nwc: "",
-      interval: cachedFormState?.interval || "day",
+      interval: cachedFormState?.interval || undefined,
     },
   });
 
@@ -189,10 +197,16 @@ function AutoZapForm(props: {
   // regex for just numbers
   const regex = /^[0-9]+$/;
 
-  const [searchParams] = useSearchParams();
-
   function handleConnectMutiny() {
+    setError(undefined);
     if (typeof window === "undefined") return undefined;
+
+    const amount = getValue(autoForm, "amount_sats");
+
+    if (!amount) {
+      setError(new Error("Please enter an amount"));
+      return;
+    }
 
     // Save current state of form to localstorage
     const formState = getValues(autoForm);
@@ -208,10 +222,20 @@ function AutoZapForm(props: {
     window.location.href = formatMutinyLink(
       name || "",
       props.npub,
-      getValue(autoForm, "interval"),
-      getValue(autoForm, "amount_sats")
+      amount,
+      getValue(autoForm, "interval")
     );
   }
+
+  createEffect(() => {
+    if (searchParams.nwc) {
+      // Click the submit button
+      const submitButton = document.querySelector(
+        "button[type=submit]"
+      ) as HTMLButtonElement;
+      submitButton?.click();
+    }
+  });
 
   return (
     <>
@@ -243,151 +267,162 @@ function AutoZapForm(props: {
             )}
           </Field>
 
-          <Field name="interval">
-            {(field, props) => (
-              <VStack>
-                <Header>How often?</Header>
-                <select {...props} value={field.value}>
-                  <For
-                    each={[
-                      {
-                        label: "Daily",
-                        value: "day",
-                      },
-                      {
-                        label: "Weekly",
-                        value: "week",
-                      },
-                      {
-                        label: "Monthly",
-                        value: "month",
-                      },
-                    ]}
-                  >
-                    {({ label, value }) => (
-                      <option
-                        value={value}
-                        class="capitalize"
-                        selected={field.value === value}
-                      >
-                        {label}
-                      </option>
-                    )}
-                  </For>
-                </select>
-              </VStack>
-            )}
-          </Field>
-          <Field name="include_sender_npub" type="boolean">
-            {(field, props) => (
-              <div class={"flex gap-4 items-center"}>
-                <input
-                  class="w-4 h-4 m-0"
-                  id={field.name}
-                  type={"checkbox"}
-                  {...props}
-                  checked={field.value}
-                ></input>
-                <label class="text-xl font-semibold" for={field.name}>
-                  Should they know it's you?
-                </label>
-              </div>
-            )}
-          </Field>
-          <Show when={getValue(autoForm, "include_sender_npub")}>
-            <Field
-              name="from_npub"
-              validate={[
-                required("Please enter an npub"),
-                custom((value) => {
-                  let decoded = nip19.decode(value!);
-                  return !!decoded.data;
-                }, "Please enter a valid npub"),
-              ]}
-            >
+          <Show when={getValue(autoForm, "amount_sats")}>
+            <Field name="interval">
               {(field, props) => (
                 <VStack>
-                  <Header>Okay, what's your npub?</Header>
-                  <input
-                    {...props}
-                    placeholder="npub1p4..."
-                    value={field.value}
-                  />
-                  {field.error && <div class="text-red-500">{field.error}</div>}
+                  <Header>How often?</Header>
+                  <select {...props} value={field.value}>
+                    <option value="" disabled selected>
+                      Pick your interval
+                    </option>
+                    <For
+                      each={[
+                        {
+                          label: "Daily",
+                          value: "day",
+                        },
+                        {
+                          label: "Weekly",
+                          value: "week",
+                        },
+                        {
+                          label: "Monthly",
+                          value: "month",
+                        },
+                      ]}
+                    >
+                      {({ label, value }) => (
+                        <option
+                          value={value}
+                          class="capitalize"
+                          selected={field.value === value}
+                        >
+                          {label}
+                        </option>
+                      )}
+                    </For>
+                  </select>
                 </VStack>
               )}
             </Field>
           </Show>
+          <Show when={getValue(autoForm, "interval")}>
+            <Field name="include_sender_npub" type="boolean">
+              {(field, props) => (
+                <div class={"flex gap-4 items-center"}>
+                  <input
+                    class="w-4 h-4 m-0"
+                    id={field.name}
+                    type={"checkbox"}
+                    {...props}
+                    checked={field.value}
+                  ></input>
+                  <label class="text-xl font-semibold" for={field.name}>
+                    Should they know it's you?
+                  </label>
+                </div>
+              )}
+            </Field>
+            <Show when={getValue(autoForm, "include_sender_npub")}>
+              <Field
+                name="from_npub"
+                validate={[
+                  required("Please enter an npub"),
+                  custom((value) => {
+                    let decoded = nip19.decode(value!);
+                    return !!decoded.data;
+                  }, "Please enter a valid npub"),
+                ]}
+              >
+                {(field, props) => (
+                  <VStack>
+                    <Header>Okay, what's your npub?</Header>
+                    <input
+                      {...props}
+                      placeholder="npub1p4..."
+                      value={field.value}
+                    />
+                    {field.error && (
+                      <div class="text-red-500">{field.error}</div>
+                    )}
+                  </VStack>
+                )}
+              </Field>
+            </Show>
 
-          <Show when={!searchParams.nwc}>
-            <div class="flex flex-col gap-4">
-              <VStack>
-                <Header>Connection method</Header>
-              </VStack>
-              <div class="flex flex-col gap-2">
-                <button
-                  onClick={handleConnectMutiny}
-                  disabled={getValue(autoForm, "manual_nwc")}
-                  class="bg-[#E53254] px-4 py-3 rounded disabled:opacity-25"
-                  type="button"
-                >
-                  Connect Mutiny Wallet
-                </button>
-                <Field name="manual_nwc" type="boolean">
-                  {(field, props) => (
-                    <button
-                      onClick={() =>
-                        setValue(
-                          autoForm,
-                          "manual_nwc",
-                          !getValue(autoForm, "manual_nwc")
-                        )
-                      }
-                      class="bg-neutral-500 px-4 py-3 rounded"
-                      type="button"
-                    >
-                      Manual Connect
-                    </button>
-                  )}
-                </Field>
-                <Show when={getValue(autoForm, "manual_nwc")}>
-                  <Field name="nwc">
+            <Show when={!searchParams.nwc}>
+              <div class="flex flex-col gap-4">
+                <VStack>
+                  <Header>Connection method</Header>
+                </VStack>
+                <div class="flex flex-col gap-2">
+                  <button
+                    onClick={handleConnectMutiny}
+                    disabled={getValue(autoForm, "manual_nwc")}
+                    class="bg-[#E53254] px-4 py-3 rounded disabled:opacity-25"
+                    type="button"
+                  >
+                    Connect Mutiny Wallet
+                  </button>
+                  <Field name="manual_nwc" type="boolean">
                     {(field, props) => (
-                      <>
-                        <textarea
-                          {...props}
-                          placeholder="nostr+walletconnect://7c30..."
-                          rows="5"
-                          class="w-full max-w-[20rem]"
-                        />
-                        {field.error && (
-                          <div class="text-red-500">{field.error}</div>
-                        )}
-                      </>
+                      <button
+                        onClick={() =>
+                          setValue(
+                            autoForm,
+                            "manual_nwc",
+                            !getValue(autoForm, "manual_nwc")
+                          )
+                        }
+                        class="bg-neutral-500 px-4 py-3 rounded"
+                        type="button"
+                      >
+                        Manual Connect
+                      </button>
                     )}
                   </Field>
-                </Show>
+                  <Show when={getValue(autoForm, "manual_nwc")}>
+                    <Field name="nwc">
+                      {(field, props) => (
+                        <>
+                          <textarea
+                            {...props}
+                            placeholder="nostr+walletconnect://7c30..."
+                            rows="5"
+                            class="w-full max-w-[20rem]"
+                          />
+                          {field.error && (
+                            <div class="text-red-500">{field.error}</div>
+                          )}
+                        </>
+                      )}
+                    </Field>
+                  </Show>
+                </div>
               </div>
-            </div>
-          </Show>
-          <Show when={searchParams.nwc}>
-            <div class="p-4 bg-[hsl(0,0%,10%)] rounded w-full max-w-[20rem] flex flex-col gap-4">
-              <span class="text-lg font-semibold">✅ Wallet Connected</span>
-              <pre class="truncate w-full text-neutral-600">
-                {searchParams.nwc}
-              </pre>
-            </div>
+            </Show>
+            <Show when={searchParams.nwc}>
+              <div class="p-4 bg-[hsl(0,0%,10%)] rounded w-full max-w-[20rem] flex flex-col gap-4">
+                <span class="text-lg font-semibold">✅ Wallet Connected</span>
+                <pre class="truncate w-full text-neutral-600">
+                  {searchParams.nwc}
+                </pre>
+              </div>
+            </Show>
           </Show>
           <Show when={!!error()}>
             <p class="text-red-500">{error()?.message}</p>
           </Show>
-          <button
-            type="submit"
-            disabled={autoForm.invalid || autoForm.submitting}
-            class="bg-primary px-8 py-4 text-black text-lg font-bold rounded self-start my-4 mx-auto disabled:opacity-25"
-          >
-            {autoForm.submitting ? "SAVING..." : "SAVE"}
-          </button>
+          <Show when={searchParams.nwc || getValue(autoForm, "manual_nwc")}>
+            <button
+              type="submit"
+              disabled={autoForm.invalid || autoForm.submitting}
+              class="bg-primary px-8 py-4 text-black text-lg font-bold rounded self-start my-4 mx-auto disabled:opacity-25"
+            >
+              {autoForm.submitting ? "SAVING..." : "SAVE"}
+            </button>
+          </Show>
         </Form>
       </Show>
       <Show when={saved()}>
@@ -395,9 +430,12 @@ function AutoZapForm(props: {
           inView={{ opacity: 1 }}
           inViewOptions={{ amount: 0.5 }}
           initial={{ opacity: 0 }}
-          class="p-8 max-w-xl mx-auto flex flex-col justify-center items-center"
+          class="p-8 max-w-xl mx-auto flex flex-col gap-4 justify-center items-center"
         >
-          <h1 class="text-4xl font-bold mb-4">SAVED</h1>
+          <h1 class="text-4xl font-bold">SAVED</h1>
+          <h1 class="text-2xl font-bold">
+            Thanks for <span class="text-primary">zapping!</span>
+          </h1>
           <button
             class="bg-primary px-8 py-4 text-black text-lg font-bold rounded self-start my-4 mx-auto"
             onClick={() => {
