@@ -13,6 +13,7 @@ import { nip19 } from "nostr-tools";
 import { For, Show, createResource, createSignal } from "solid-js";
 import { useParams, useSearchParams } from "solid-start";
 import { Header, VStack } from "~/components";
+import { AutoFaq } from "~/components/AutoZapFaq";
 
 const PRIMAL_API = "https://primal-cache.mutinywallet.com/api";
 const API_URL = import.meta.env.VITE_ZAPPLE_API_URL;
@@ -408,14 +409,6 @@ function AutoZapForm(props: {
 export default function AutoZap() {
   const params = useParams();
 
-  function handleMakePage() {
-    let npub = window.prompt("What's your npub?");
-
-    if (!npub) return;
-
-    window.location.href = `/autozap/${npub}`;
-  }
-
   const [user] = createResource(params.id, fetchUser);
   return (
     <main class="pb-8">
@@ -453,38 +446,7 @@ export default function AutoZap() {
           <AutoZapForm npub={params.id} userProfile={user()} />
         </Show>
 
-        <aside class="p-4 bg-[hsl(0,0%,10%)] rounded w-full max-w-[20rem] flex flex-col gap-4">
-          <h2 class="text-xl font-semibold text-left">What is this?</h2>
-          <p>
-            <span class="text-primary font-semibold">Zaps</span> are a
-            convenient way to tip your friends on Nostr.
-          </p>
-          <p>
-            <span class="text-primary font-semibold">
-              NWC (Nostr Wallet Connect)
-            </span>{" "}
-            is a way to connect your wallet to your Nostr client.
-          </p>
-          <p>
-            <span class="text-primary font-semibold">AutoZaps</span> uses NWC to
-            ping your wallet with a Zap request on a regular interval. Streaming
-            sats for everyone!
-          </p>
-          <p>
-            <span class="text-primary font-semibold">
-              How do I stop a subscription?
-            </span>{" "}
-            Just delete the NWC item from your wallet.{" "}
-          </p>
-          <p>
-            <span class="text-primary font-semibold">
-              How do I make one of these pages?
-            </span>{" "}
-            <button onClick={handleMakePage} class="underline">
-              I'm glad you asked
-            </button>
-          </p>
-        </aside>
+        <AutoFaq />
       </div>
     </main>
   );
