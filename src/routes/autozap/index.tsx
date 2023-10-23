@@ -79,9 +79,12 @@ export default function AutoZapIndex() {
     <div class="flex flex-col items-center gap-4 py-8">
       <h1 class="text-4xl font-semibold text-center">AutoZap</h1>
       <CreateAutozapPage />
-      <p class="text-center text-lg">
-        (everyone's page is located at <code>zapplepay.com/autozap/NPUB</code>)
-      </p>
+      <div class="w-full max-w-[20rem] bg-[hsl(0,0%,10%)] rounded p-4">
+        <p class="text-center text-lg">
+          (everyone's page is located at <code>zapplepay.com/autozap/NPUB</code>
+          )
+        </p>
+      </div>
       <h2 class="text-2xl font-semibold text-center">
         TRENDING <span class="text-primary">ZAPPEES</span>
       </h2>

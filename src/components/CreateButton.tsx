@@ -31,8 +31,8 @@ export function CreateAutozapPage() {
           CREATE YOUR AUTOZAP PAGE
         </button>
       </Show>
-      <Form onSubmit={handleSubmit} class="w-full max-w-[20rem]">
-        <Show when={showForm()}>
+      <Show when={showForm()}>
+        <Form onSubmit={handleSubmit} class="w-full max-w-[20rem]">
           <Field
             name="npub"
             validate={[
@@ -61,8 +61,8 @@ export function CreateAutozapPage() {
           >
             CREATE
           </button>
-        </Show>
-      </Form>
+        </Form>
+      </Show>
     </>
   );
 }
