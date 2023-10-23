@@ -10,6 +10,12 @@ module.exports = {
         "light-gray": "hsla(0, 0%, 84%, 1)",
         "dark-gray": "hsla(120, 2%, 20%, 1)",
       },
+      keyframes: {
+        shadowbounce: {
+          '0%, 100%': { transform: 'translateX(0.5rem) translateY(0.5rem)' },
+          '50%': { transform: 'translateX(0rem)' },
+        },
+      }
     },
   },
   plugins: [],
