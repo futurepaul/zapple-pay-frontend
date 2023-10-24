@@ -19,6 +19,7 @@ import {
 import { useParams, useSearchParams } from "solid-start";
 import { Header, VStack } from "~/components";
 import { AutoFaq } from "~/components/AutoZapFaq";
+import { CheckOut } from "~/components/CheckOut";
 import { CreateAutozapPage } from "~/components/CreateButton";
 
 const PRIMAL_API = "https://primal-cache.mutinywallet.com/api";
@@ -126,8 +127,13 @@ function AutoZapForm(props: {
     // Clear localstorage
     localStorage.removeItem(`autozap:${props.npub}`);
 
+    const fromnpub = localStorage.getItem("fromnpub");
+
     if (formState) {
       const parsedState = JSON.parse(formState);
+      if (fromnpub) {
+        parsedState.from_npub = fromnpub;
+      }
       return parsedState;
     }
   }
@@ -160,6 +166,11 @@ function AutoZapForm(props: {
 
     // If there's no from npub set, just use zapple pay's npub
     const from_npub_hex = nip19.decode(from_npub || ZAPPLE_PAY_NPUB).data;
+
+    // Save from_npub to localstorage
+    if (from_npub) {
+      localStorage.setItem("fromnpub", from_npub)
+    }
 
     const payload = {
       npub: from_npub_hex,
@@ -457,9 +468,11 @@ export default function AutoZap() {
   return (
     <main class="pb-8">
       <div
-        class="w-full bg-neutral-900 aspect-[3/1] min-h-[8rem] bg-cover bg-center bg-no-repeat max-h-[16rem]"
+        class="relative w-full bg-neutral-900 aspect-[3/1] min-h-[8rem] bg-cover bg-center bg-no-repeat max-h-[16rem]"
         style={{ "background-image": `url(${user()?.banner})` }}
       >
+                <CheckOut />
+
         <Show when={user()}>
           <div
             class="h-full bg-neutral-900 aspect-square max-h-[16rem] rounded-full translate-y-1/2 ml-auto mr-auto drop-shadow bg-cover bg-center bg-no-repeat border-2 border-black"

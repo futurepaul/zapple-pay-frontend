@@ -28,7 +28,7 @@ export function CreateAutozapPage() {
           onclick={() => setShowForm(true)}
           class="bg-primary px-8 py-4 text-black text-lg font-bold rounded self-start my-4 mx-auto disabled:opacity-25"
         >
-          CREATE YOUR AUTOZAP PAGE
+          FIND AN AUTOZAP PAGE
         </button>
       </Show>
       <Show when={showForm()}>
@@ -45,7 +45,7 @@ export function CreateAutozapPage() {
           >
             {(field, props) => (
               <VStack>
-                <Header>Okay, what's your npub?</Header>
+                <Header>Okay, what's the npub?</Header>
                 <input
                   {...props}
                   placeholder="npub1p4..."
