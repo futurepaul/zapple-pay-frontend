@@ -4,11 +4,25 @@ import {
   getValue,
   required,
   reset,
+  setValue,
 } from "@modular-forms/solid";
 import { Motion } from "@motionone/solid";
-import { For, Show, createSignal } from "solid-js";
+import { For, Show, createSignal, onCleanup, onMount } from "solid-js";
 import { nip19 } from "nostr-tools";
 import { isOnlyOneEmoji } from "~/regex";
+import { isServer } from "solid-js/web";
+
+import "@getalby/bitcoin-connect";
+
+import type { ComponentProps } from "solid-js";
+
+declare module "solid-js" {
+  namespace JSX {
+    interface IntrinsicElements {
+      "bc-button": ComponentProps<"div"> & { "app-name": string };
+    }
+  }
+}
 
 const API_URL = import.meta.env.VITE_ZAPPLE_API_URL;
 
@@ -37,6 +51,40 @@ export default function Home() {
       donate_damus: false,
       donate_opensats: false,
     },
+  });
+
+  onMount(() => {
+    if (!isServer) {
+      window.addEventListener("bc:connected", (e: any) => {
+        console.log(e);
+        // Look in localstorage for the config
+        // Dumb race condition where it takes time for something to be in localstorage
+        setTimeout(() => {
+          const config = localStorage.getItem("bc:config");
+          console.log(config);
+          if (!config) {
+            console.error("no config found");
+            return;
+          } else {
+            const configObj = JSON.parse(config);
+            console.log(configObj.nwcUrl)
+            if (configObj.nwcUrl) {
+              setValue(zappleForm, "nwc", configObj.nwcUrl);
+            } else {
+              console.error("no nwc url found");
+            }
+          }
+        }, 500);
+
+
+      });
+    }
+  });
+
+  onCleanup(() => {
+    if (!isServer) {
+      window.removeEventListener("bc:connected", () => {});
+    }
   });
 
   const handleSubmit = async (f: ZappleForm) => {
@@ -104,16 +152,14 @@ export default function Home() {
         inView={{ transform: "scaleY(1)" }}
         class="relative h-[100vh] w-full flex flex-col items-center justify-center  bg-primary text-background"
       >
-        
-        <a href="/autozap/" class="z-10 text-white justify-center flex flex-col items-center text-center font-bold rotate-12 absolute w-[10rem] h-[10rem] bg-black right-[1rem] top-[1rem] rounded-full">
-          Check out <span class="underline font-black">
-            AutoZaps!
-            </span>
+        <a
+          href="/autozap/"
+          class="z-10 text-white justify-center flex flex-col items-center text-center font-bold rotate-12 absolute w-[10rem] h-[10rem] bg-black right-[1rem] top-[1rem] rounded-full"
+        >
+          Check out <span class="underline font-black">AutoZaps!</span>
         </a>
-        <div class="animate-[shadowbounce_2s_ease-in-out_infinite] z-5 absolute w-[10rem] h-[10rem] bg-black/30 right-[0.75rem] top-[1.25rem] rounded-full">
-          </div>
-        
-        
+        <div class="animate-[shadowbounce_2s_ease-in-out_infinite] z-5 absolute w-[10rem] h-[10rem] bg-black/30 right-[0.75rem] top-[1.25rem] rounded-full"></div>
+
         <Motion.img
           src="/zapple-logo.svg"
           class="mx-auto h-[270px] w-[270px]"
@@ -274,10 +320,12 @@ export default function Home() {
                   </label>
                   <textarea
                     {...props}
+                    value={field.value}
                     placeholder="nostr+walletconnect://7c30..."
                     rows="5"
                   />
                   {field.error && <div class="text-red-500">{field.error}</div>}
+                  <bc-button app-name="ZapplePay" />
                 </>
               )}
             </Field>
