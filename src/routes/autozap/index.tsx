@@ -77,7 +77,7 @@ function MiniProfiles() {
 export default function AutoZapIndex() {
   return (
     <div class="flex flex-col items-center gap-4 py-8">
-      <h1 class="text-4xl font-semibold text-center">AutoZap</h1>
+      <h1 class="text-4xl font-semibold text-center [text-shadow:_4px_4px_0_rgb(0_0_0_/_20%)]">Auto<span class="text-primary">Zap</span></h1>
       <CreateAutozapPage />
       <h2 class="text-2xl font-semibold text-center">
         TRENDING <span class="text-primary">ZAPPEES</span>
