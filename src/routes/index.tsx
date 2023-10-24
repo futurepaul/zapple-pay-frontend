@@ -9,6 +9,7 @@ import { Motion } from "@motionone/solid";
 import { For, Show, createSignal } from "solid-js";
 import { nip19 } from "nostr-tools";
 import { isOnlyOneEmoji } from "~/regex";
+import { CheckOut } from "~/components/CheckOut";
 
 const API_URL = import.meta.env.VITE_ZAPPLE_API_URL;
 
@@ -104,16 +105,7 @@ export default function Home() {
         inView={{ transform: "scaleY(1)" }}
         class="relative h-[100vh] w-full flex flex-col items-center justify-center  bg-primary text-background"
       >
-        
-        <a href="/autozap/" class="z-10 text-white justify-center flex flex-col items-center text-center font-bold rotate-12 absolute w-[10rem] h-[10rem] bg-black right-[1rem] top-[1rem] rounded-full">
-          Check out <span class="underline font-black">
-            AutoZaps!
-            </span>
-        </a>
-        <div class="animate-[shadowbounce_2s_ease-in-out_infinite] z-5 absolute w-[10rem] h-[10rem] bg-black/30 right-[0.75rem] top-[1.25rem] rounded-full">
-          </div>
-        
-        
+        <CheckOut page />
         <Motion.img
           src="/zapple-logo.svg"
           class="mx-auto h-[270px] w-[270px]"
