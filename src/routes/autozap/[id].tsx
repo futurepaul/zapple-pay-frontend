@@ -39,6 +39,11 @@ function formatMutinyLink(
   const callbackUrlOrigin = window.location.origin;
   const callbackUrl = `${callbackUrlOrigin}/autozap/${npub}`;
 
+  if (interval == "hour") {
+    interval = "day";
+    amount = String(Number(amount) * 24);
+  }
+
   const query = new URLSearchParams({
     return_to: callbackUrl,
     name: `AutoZap-${name}`,
@@ -289,6 +294,10 @@ function AutoZapForm(props: {
                     </option>
                     <For
                       each={[
+                        {
+                          label: "Hourly",
+                          value: "hour",
+                        },
                         {
                           label: "Daily",
                           value: "day",
