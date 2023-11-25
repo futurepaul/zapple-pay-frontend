@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@modular-forms/solid':
-    specifier: ^0.19.2
-    version: 0.19.2(solid-js@1.7.11)
+    specifier: ^0.20.0
+    version: 0.20.0(solid-js@1.7.11)
   '@motionone/solid':
     specifier: ^10.16.2
     version: 10.16.2(solid-js@1.7.11)
@@ -26,6 +26,9 @@ dependencies:
   solid-js:
     specifier: ^1.7.11
     version: 1.7.11
+  solid-qr-code:
+    specifier: ^0.0.8
+    version: 0.0.8(qr.js@0.0.0)(solid-js@1.7.11)
   solid-start:
     specifier: ^0.3.5
     version: 0.3.5(@solidjs/meta@0.28.6)(@solidjs/router@0.8.3)(solid-js@1.7.11)(solid-start-node@0.3.5)(solid-start-vercel@0.3.5)(vite@4.4.9)
@@ -37,12 +40,18 @@ dependencies:
     version: 5.24.0
 
 devDependencies:
+  '@types/node':
+    specifier: ^20.10.2
+    version: 20.10.2
   autoprefixer:
     specifier: ^10.4.15
     version: 10.4.15(postcss@8.4.29)
   postcss:
     specifier: ^8.4.29
     version: 8.4.29
+  prettier:
+    specifier: ^3.0.3
+    version: 3.1.0
   solid-start-node:
     specifier: ^0.3.5
     version: 0.3.5(solid-start@0.3.5)(vite@4.4.9)
@@ -54,7 +63,7 @@ devDependencies:
     version: 5.2.2
   vite:
     specifier: ^4.4.9
-    version: 4.4.9
+    version: 4.4.9(@types/node@20.10.2)
 
 packages:
 
@@ -1578,8 +1587,8 @@ packages:
       - encoding
       - supports-color
 
-  /@modular-forms/solid@0.19.2(solid-js@1.7.11):
-    resolution: {integrity: sha512-ikOqWUUw2U8ShyYUQSQm7tNj1JLL+2wDhU4j9K/U0KKk3lIMJKwZEPb+jMIXVI/1yytwcg1cnVtulmhBAA10UA==}
+  /@modular-forms/solid@0.20.0(solid-js@1.7.11):
+    resolution: {integrity: sha512-CyXoeo2cwNel2N753c+iDzA+4DgtBrLNAS87DY/aODFZG7QoY0A9YSxdUxRf0N5NDwkzmn1O0XqwMP+EAiOHbA==}
     peerDependencies:
       solid-js: ^1.3.1
     dependencies:
@@ -1897,6 +1906,11 @@ packages:
 
   /@types/ms@0.7.31:
     resolution: {integrity: sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==}
+
+  /@types/node@20.10.2:
+    resolution: {integrity: sha512-37MXfxkb0vuIlRKHNxwCkb60PNBpR94u4efQuN4JgIAm66zfCDXGSAFCef9XUWFovX2R1ok6Z7MHhtdVXXkkIw==}
+    dependencies:
+      undici-types: 5.26.5
 
   /@types/resolve@1.20.2:
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
@@ -3300,6 +3314,16 @@ packages:
       picocolors: 1.0.0
       source-map-js: 1.0.2
 
+  /prettier@3.1.0:
+    resolution: {integrity: sha512-TQLvXjq5IAibjh8EpBIkNKxO749UEWABoiIZehEPiY4GNpVdhaFKqSTu+QrlU6D2dPAfubRmtJTi4K4YkQ5eXw==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dev: true
+
+  /qr.js@0.0.0:
+    resolution: {integrity: sha512-c4iYnWb+k2E+vYpRimHqSu575b1/wKl4XFeJGpFmrJQz5I88v9aY2czh7s0w36srfCM1sXgC/xpoJz5dJfq+OQ==}
+    dev: false
+
   /queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
 
@@ -3499,6 +3523,17 @@ packages:
       csstype: 3.1.2
       seroval: 0.5.1
 
+  /solid-qr-code@0.0.8(qr.js@0.0.0)(solid-js@1.7.11):
+    resolution: {integrity: sha512-K7LC3IKvyRag6WW7/ijJl32pBmoC3EzZ7AuydyaAVKSmlwukJmqvrFkrxaA1bOWabYJhzP9qwLbjDVlCUP2BwQ==}
+    engines: {node: '>=10', yarn: '>=1.22.5'}
+    peerDependencies:
+      qr.js: ^0.0.0
+      solid-js: ^1.4.8
+    dependencies:
+      qr.js: 0.0.0
+      solid-js: 1.7.11
+    dev: false
+
   /solid-refresh@0.5.3(solid-js@1.7.11):
     resolution: {integrity: sha512-Otg5it5sjOdZbQZJnvo99TEBAr6J7PQ5AubZLNU6szZzg3RQQ5MX04oteBIIGDs0y2Qv8aXKm9e44V8z+UnFdw==}
     peerDependencies:
@@ -3524,7 +3559,7 @@ packages:
       sirv: 2.0.3
       solid-start: 0.3.5(@solidjs/meta@0.28.6)(@solidjs/router@0.8.3)(solid-js@1.7.11)(solid-start-node@0.3.5)(solid-start-vercel@0.3.5)(vite@4.4.9)
       terser: 5.19.4
-      vite: 4.4.9
+      vite: 4.4.9(@types/node@20.10.2)
     transitivePeerDependencies:
       - supports-color
 
@@ -3543,7 +3578,7 @@ packages:
       rollup: 3.29.2
       solid-start: 0.3.5(@solidjs/meta@0.28.6)(@solidjs/router@0.8.3)(solid-js@1.7.11)(solid-start-node@0.3.5)(solid-start-vercel@0.3.5)(vite@4.4.9)
       terser: 5.19.4
-      vite: 4.4.9
+      vite: 4.4.9(@types/node@20.10.2)
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -3617,7 +3652,7 @@ packages:
       solid-start-vercel: 0.3.5(solid-start@0.3.5)(vite@4.4.9)
       terser: 5.19.4
       undici: 5.24.0
-      vite: 4.4.9
+      vite: 4.4.9(@types/node@20.10.2)
       vite-plugin-inspect: 0.7.38(rollup@3.29.2)(vite@4.4.9)
       vite-plugin-solid: 2.7.0(solid-js@1.7.11)(vite@4.4.9)
       wait-on: 6.0.1(debug@4.3.4)
@@ -3828,6 +3863,9 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
+  /undici-types@5.26.5:
+    resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
+
   /undici@5.24.0:
     resolution: {integrity: sha512-OKlckxBjFl0oXxcj9FU6oB8fDAaiRUq+D8jrFWGmOfI/gIyjk/IeS75LMzgYKUaeHzLUcYvf9bbJGSrUwTfwwQ==}
     engines: {node: '>=14.0'}
@@ -3920,7 +3958,7 @@ packages:
       open: 9.1.0
       picocolors: 1.0.0
       sirv: 2.0.3
-      vite: 4.4.9
+      vite: 4.4.9(@types/node@20.10.2)
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -3938,12 +3976,12 @@ packages:
       merge-anything: 5.1.7
       solid-js: 1.7.11
       solid-refresh: 0.5.3(solid-js@1.7.11)
-      vite: 4.4.9
+      vite: 4.4.9(@types/node@20.10.2)
       vitefu: 0.2.4(vite@4.4.9)
     transitivePeerDependencies:
       - supports-color
 
-  /vite@4.4.9:
+  /vite@4.4.9(@types/node@20.10.2):
     resolution: {integrity: sha512-2mbUn2LlUmNASWwSCNSJ/EG2HuSRTnVNaydp6vMCm5VIqJsjMfbIWtbH2kDuwUVW5mMUKKZvGPX/rqeqVvv1XA==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -3971,6 +4009,7 @@ packages:
       terser:
         optional: true
     dependencies:
+      '@types/node': 20.10.2
       esbuild: 0.18.20
       postcss: 8.4.29
       rollup: 3.29.2
@@ -3985,7 +4024,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 4.4.9
+      vite: 4.4.9(@types/node@20.10.2)
 
   /wait-on@6.0.1(debug@4.3.4):
     resolution: {integrity: sha512-zht+KASY3usTY5u2LgaNqn/Cd8MukxLGjdcZxT2ns5QzDmTFc4XoWBgC+C/na+sMRZTuVygQoMYwdcVjHnYIVw==}
