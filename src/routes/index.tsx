@@ -33,6 +33,7 @@ type ZappleForm = {
 type ZapplePayPayloadEmoji = {
     npub: string;
     amount_sats: number;
+    emoji: string;
     auth_id?: string;
     nwc?: string;
     donations?: Array<{ amount_sats: number; npub: string }>;
@@ -85,6 +86,7 @@ export default function Home() {
         const payload: ZapplePayPayloadEmoji = {
             npub: npubHex.toString(),
             amount_sats: Number(amount_sats),
+            emoji,
             donations
         };
 
@@ -131,7 +133,19 @@ export default function Home() {
 
         if (!amount) return undefined;
 
-        // thankfully empty object is truthy!
+        const npub = getValue(zappleForm, "npub");
+
+        if (!npub) return undefined;
+
+        let user_npub_hex = undefined;
+
+        try {
+            user_npub_hex = nip19.decode(npub).data;
+        } catch (e) {
+            return undefined;
+        }
+
+        // Empty object is truthy
         return {};
     });
 
@@ -259,7 +273,7 @@ export default function Home() {
                                         <label class="text-sm font-normal mt-0 opacity-75">
                                             Which reaction emoji do you want to
                                             trigger zaps? Damus uses 🤙 by
-                                            default.
+                                            default. Primal's default is ❤️.
                                         </label>
                                         <select {...props}>
                                             <For
@@ -448,9 +462,7 @@ export default function Home() {
                             </button>
                         </Show>
                         <Show when={!!error()}>
-                            <p class="text-red-500">
-                                Error: {error()?.message}
-                            </p>
+                            <p class="text-red-500">{error()?.message}</p>
                         </Show>
                     </Form>
                 </Motion.section>
@@ -467,6 +479,7 @@ export default function Home() {
                         class="bg-primary px-8 py-4 text-black text-lg font-bold rounded self-start my-4 mx-auto"
                         onClick={() => {
                             reset(zappleForm);
+                            setNwaAuthId(undefined);
                             setSaved(false);
                         }}
                     >

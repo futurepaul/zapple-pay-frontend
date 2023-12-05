@@ -43,7 +43,7 @@ export async function createNwa({
 
     // If we have an amount we must also have a time_period, if we have a time_period we must also have an amount
     if ((amount && !time_period) || (!amount && time_period)) {
-        throw new Error("Invalid amount or time_period");
+        return undefined;
     }
 
     let params = undefined;
