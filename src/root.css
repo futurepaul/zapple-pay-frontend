@@ -3,15 +3,22 @@
 @tailwind utilities;
 
 html {
-    font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    background: ;
+    font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica,
+        Arial, sans-serif;
+    background:;
     color: white;
     @apply bg-background;
 }
 
-input, textarea, select {
+input,
+textarea,
+select {
     @apply bg-[hsl(0,0%,10%)] text-white border border-[hsl(0,0%,20%)] rounded p-[0.5rem] text-[1rem] leading-[1.5] w-full;
     @apply placeholder:text-[hsl(0,0%,40%)] text-lg;
+}
+
+a {
+    @apply text-primary no-underline hover:underline;
 }
 
 select {
